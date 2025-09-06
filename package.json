@@ -28,7 +28,8 @@
     "theme": "dark"
   },
   "engines": {
-    "vscode": "^1.103.0"
+    "vscode": "^1.103.0",
+    "node": ">=20.18.1"
   },
   "categories": [
     "Other"

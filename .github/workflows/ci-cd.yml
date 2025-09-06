@@ -17,7 +17,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
     
     - name: Install dependencies
@@ -48,7 +48,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
     
     - name: Install dependencies
@@ -56,7 +56,7 @@ jobs:
     
     - name: Package extension
       run: |
-        npm install -g vsce
+        npm install -g @vscode/vsce
         vsce package
     
     - name: Upload VSIX artifact
@@ -76,7 +76,7 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
     
     - name: Install dependencies
@@ -84,7 +84,7 @@ jobs:
     
     - name: Publish to VS Code Marketplace
       run: |
-        npm install -g vsce
+        npm install -g @vscode/vsce
         vsce publish -p ${{ secrets.VSCE_TOKEN }}
       env:
         VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
@@ -97,27 +97,18 @@ jobs:
         OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
       continue-on-error: true
     
-    - name: Create GitHub Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    
     - name: Download VSIX artifact
       uses: actions/download-artifact@v4
       with:
         name: extension-vsix
     
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+        files: '*.vsix'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: copilot-chat-history-*.vsix
-        asset_name: copilot-chat-history.vsix
-        asset_content_type: application/octet-stream
