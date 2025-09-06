@@ -3,16 +3,16 @@
   "displayName": "Copilot Chat History",
   "description": "View and manage your GitHub Copilot chat history organized by workspace with search and navigation features",
   "version": "1.0.1",
-  "publisher": "your-publisher-name",
+  "publisher": "arbuzov",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/copilot-chat-history.git"
+    "url": "https://github.com/arbuzov/copilot-chat-history.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/copilot-chat-history/issues"
+    "url": "https://github.com/arbuzov/copilot-chat-history/issues"
   },
-  "homepage": "https://github.com/your-username/copilot-chat-history#readme",
+  "homepage": "https://github.com/arbuzov/copilot-chat-history#readme",
   "keywords": [
     "copilot",
     "chat",
