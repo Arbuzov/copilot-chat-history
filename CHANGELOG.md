@@ -1,4 +1,18 @@
-# Change Log
+# Changelog
+
+All notable changes to the "copilot-chat-history" extension will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.1] - 2025-09-06
+
+### Fixed
+- Updated Node.js version requirement to 20.x for compatibility with latest vsce and dependencies
+- Fixed CI/CD pipeline to use @vscode/vsce instead of deprecated vsce package
+- Updated GitHub Actions to use modern actions (softprops/action-gh-release@v1)
+
+## [1.0.0] - 2025-09-06 Log
 
 All notable changes to the "Copilot Chat History" extension will be documented in this file.
 
