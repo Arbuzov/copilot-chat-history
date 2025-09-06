@@ -6,6 +6,18 @@ on:
     tags: [ 'v*' ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:  # Позволяет запускать вручную
+    inputs:
+      publish_marketplace:
+        description: 'Publish to VS Code Marketplace'
+        required: false
+        default: true
+        type: boolean
+      publish_ovsx:
+        description: 'Publish to Open VSX Registry'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   test:
@@ -82,20 +94,48 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Publish to VS Code Marketplace
+    - name: Build and package extension
       run: |
-        npm install -g @vscode/vsce
-        vsce publish -p ${{ secrets.VSCE_TOKEN }}
+        npm run package
+        npx @vscode/vsce package
+    
+    - name: Check if VSCE_TOKEN is set
+      run: |
+        if [ -z "$VSCE_TOKEN" ]; then
+          echo "⚠️ VSCE_TOKEN is not set - skipping VS Code Marketplace publication"
+        else
+          echo "✅ VSCE_TOKEN is configured"
+        fi
+      env:
+        VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+    
+    - name: Check if OVSX_TOKEN is set
+      run: |
+        if [ -z "$OVSX_TOKEN" ]; then
+          echo "⚠️ OVSX_TOKEN is not set - skipping Open VSX Registry publication"
+        else
+          echo "✅ OVSX_TOKEN is configured"
+        fi
+      env:
+        OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
+    
+    - name: Publish to VS Code Marketplace
+      if: ${{ secrets.VSCE_TOKEN != '' }}
+      run: |
+        echo "🚀 Publishing to VS Code Marketplace..."
+        npx @vscode/vsce publish --pat $VSCE_TOKEN
+        echo "✅ Successfully published to VS Code Marketplace"
       env:
         VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
     
     - name: Publish to Open VSX Registry
+      if: ${{ secrets.OVSX_TOKEN != '' }}
       run: |
-        npm install -g ovsx
-        ovsx publish -p ${{ secrets.OVSX_TOKEN }}
+        echo "🚀 Publishing to Open VSX Registry..."
+        npx ovsx publish --pat $OVSX_TOKEN
+        echo "✅ Successfully published to Open VSX Registry"
       env:
         OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
-      continue-on-error: true
     
     - name: Download VSIX artifact
       uses: actions/download-artifact@v4
