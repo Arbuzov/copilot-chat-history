@@ -1,0 +1,163 @@
+{
+  "name": "copilot-chat-history",
+  "displayName": "Copilot Chat History",
+  "description": "View and manage your GitHub Copilot chat history organized by workspace with search and navigation features",
+  "version": "1.0.0",
+  "publisher": "your-publisher-name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/copilot-chat-history.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/copilot-chat-history/issues"
+  },
+  "homepage": "https://github.com/your-username/copilot-chat-history#readme",
+  "keywords": [
+    "copilot",
+    "chat",
+    "history",
+    "ai",
+    "assistant",
+    "workspace",
+    "search"
+  ],
+  "icon": "resources/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.103.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "copilot-chat-history",
+          "title": "Copilot Chat History",
+          "icon": "$(comment-discussion)"
+        }
+      ]
+    },
+    "views": {
+      "copilot-chat-history": [
+        {
+          "id": "copilotChatHistoryView",
+          "name": "Chat Sessions",
+          "when": "true"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "copilotChatHistory.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "copilotChatHistory.search",
+        "title": "Search Chat Sessions",
+        "icon": "$(search)"
+      },
+      {
+        "command": "copilotChatHistory.clearFilter",
+        "title": "Clear Filter",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "copilotChatHistory.openChat",
+        "title": "Open Chat Session"
+      },
+      {
+        "command": "copilotChatHistory.openWorkspaceInCurrentWindow",
+        "title": "Open Workspace in Current Window",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "copilotChatHistory.openWorkspaceInNewWindow",
+        "title": "Open Workspace in New Window",
+        "icon": "$(link-external)"
+      },
+      {
+        "command": "copilotChatHistory.helloWorld",
+        "title": "Hello World from Copilot Chat History"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "copilotChatHistory.search",
+          "when": "view == copilotChatHistoryView",
+          "group": "navigation@1"
+        },
+        {
+          "command": "copilotChatHistory.clearFilter",
+          "when": "view == copilotChatHistoryView",
+          "group": "navigation@2"
+        },
+        {
+          "command": "copilotChatHistory.refresh",
+          "when": "view == copilotChatHistoryView",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "copilotChatHistory.openChat",
+          "when": "view == copilotChatHistoryView && viewItem == chatSession"
+        },
+        {
+          "command": "copilotChatHistory.openWorkspaceInCurrentWindow",
+          "when": "view == copilotChatHistoryView && viewItem == workspaceGroup",
+          "group": "inline@1"
+        },
+        {
+          "command": "copilotChatHistory.openWorkspaceInNewWindow",
+          "when": "view == copilotChatHistoryView && viewItem == workspaceGroup",
+          "group": "inline@2"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "vsce:package": "vsce package",
+    "vsce:publish": "vsce publish",
+    "vsce:publish:patch": "vsce publish patch",
+    "vsce:publish:minor": "vsce publish minor",
+    "vsce:publish:major": "vsce publish major",
+    "ovsx:publish": "ovsx publish"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@types/vscode": "^1.103.0",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.9",
+    "eslint": "^9.34.0",
+    "npm-run-all": "^4.1.5",
+    "ovsx": "^0.9.5",
+    "typescript": "^5.9.2"
+  }
+}

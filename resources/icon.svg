@@ -1,0 +1,24 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <rect width="128" height="128" fill="#1e1e1e"/>
+  
+  <!-- Chat bubble -->
+  <rect x="20" y="30" width="50" height="35" rx="8" fill="#0078d4" opacity="0.9"/>
+  <circle cx="32" cy="42" r="3" fill="white"/>
+  <circle cx="42" cy="42" r="3" fill="white"/>
+  <circle cx="52" cy="42" r="3" fill="white"/>
+  
+  <!-- Second chat bubble -->
+  <rect x="58" y="50" width="50" height="35" rx="8" fill="#40e0d0" opacity="0.8"/>
+  <circle cx="70" cy="62" r="3" fill="white"/>
+  <circle cx="80" cy="62" r="3" fill="white"/>
+  <circle cx="90" cy="62" r="3" fill="white"/>
+  
+  <!-- History lines -->
+  <rect x="20" y="95" width="40" height="3" rx="1.5" fill="#888"/>
+  <rect x="20" y="102" width="60" height="3" rx="1.5" fill="#888"/>
+  <rect x="20" y="109" width="30" height="3" rx="1.5" fill="#888"/>
+  
+  <!-- Copilot icon hint -->
+  <circle cx="100" cy="25" r="12" fill="#ff6b35"/>
+  <rect x="96" y="21" width="8" height="8" rx="2" fill="white"/>
+</svg>
