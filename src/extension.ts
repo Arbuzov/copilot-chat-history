@@ -322,6 +322,306 @@ class CopilotChatHistoryProvider implements vscode.TreeDataProvider<ChatSession 
     }
 }
 
+// Интерфейсы для структуры чата
+interface ChatMessage {
+    message: {
+        text: string;
+    };
+    response: Array<{
+        value: string;
+    }>;
+    timestamp?: number;
+}
+
+interface ChatSessionData {
+    version: number;
+    requesterUsername: string;
+    responderUsername: string;
+    requests: ChatMessage[];
+    customTitle?: string;
+    creationDate?: number;
+    lastMessageDate?: number;
+}
+
+// Функция для открытия чата в webview
+function openChatInWebview(session: ChatSession, context: vscode.ExtensionContext) {
+    try {
+        // Читаем данные сессии
+        if (!fs.existsSync(session.filePath)) {
+            vscode.window.showErrorMessage(`Chat session file not found: ${session.filePath}`);
+            return;
+        }
+
+        const sessionData: ChatSessionData = JSON.parse(fs.readFileSync(session.filePath, 'utf8'));
+        
+        // Создаем webview panel
+        const panel = vscode.window.createWebviewPanel(
+            'copilotChatViewer',
+            session.customTitle || `Chat Session ${session.id}`,
+            vscode.ViewColumn.One,
+            {
+                enableScripts: true,
+                enableForms: false,
+                localResourceRoots: [context.extensionUri]
+            }
+        );
+
+        // Генерируем HTML контент
+        panel.webview.html = generateChatHTML(sessionData, session);
+
+    } catch (error) {
+        console.error('Error opening chat in webview:', error);
+        vscode.window.showErrorMessage(`Error opening chat: ${error}`);
+    }
+}
+
+// Функция для генерации HTML контента чата
+function generateChatHTML(sessionData: ChatSessionData, session: ChatSession): string {
+    const messages = sessionData.requests || [];
+    
+    let messagesHtml = '';
+    
+    messages.forEach((request, index) => {
+        // Сообщение пользователя
+        if (request.message && request.message.text) {
+            messagesHtml += `
+                <div class="message user-message">
+                    <div class="message-header">
+                        <div class="avatar user-avatar">👤</div>
+                        <div class="username">${sessionData.requesterUsername || 'User'}</div>
+                    </div>
+                    <div class="message-content">${escapeHtml(request.message.text)}</div>
+                </div>
+            `;
+        }
+        
+        // Ответ Copilot
+        if (request.response && request.response.length > 0) {
+            const responseText = request.response.map(r => r.value).join('\n');
+            messagesHtml += `
+                <div class="message copilot-message">
+                    <div class="message-header">
+                        <div class="avatar copilot-avatar">🤖</div>
+                        <div class="username">${sessionData.responderUsername || 'GitHub Copilot'}</div>
+                    </div>
+                    <div class="message-content">${formatCodeContent(responseText)}</div>
+                </div>
+            `;
+        }
+    });
+
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Chat Session</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                    background-color: var(--vscode-editor-background);
+                    color: var(--vscode-editor-foreground);
+                    line-height: 1.6;
+                }
+                
+                .chat-container {
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+                
+                .chat-header {
+                    border-bottom: 1px solid var(--vscode-panel-border);
+                    padding-bottom: 15px;
+                    margin-bottom: 20px;
+                }
+                
+                .chat-title {
+                    font-size: 1.4em;
+                    font-weight: 600;
+                    margin: 0 0 5px 0;
+                }
+                
+                .chat-meta {
+                    color: var(--vscode-descriptionForeground);
+                    font-size: 0.9em;
+                }
+                
+                .message {
+                    margin-bottom: 20px;
+                    padding: 15px;
+                    border-radius: 8px;
+                    border: 1px solid var(--vscode-panel-border);
+                }
+                
+                .user-message {
+                    background-color: var(--vscode-input-background);
+                    border-left: 4px solid var(--vscode-charts-blue);
+                }
+                
+                .copilot-message {
+                    background-color: var(--vscode-textBlockQuote-background);
+                    border-left: 4px solid var(--vscode-charts-green);
+                }
+                
+                .message-header {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 10px;
+                }
+                
+                .avatar {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 8px;
+                    font-size: 14px;
+                }
+                
+                .user-avatar {
+                    background-color: var(--vscode-charts-blue);
+                }
+                
+                .copilot-avatar {
+                    background-color: var(--vscode-charts-green);
+                }
+                
+                .username {
+                    font-weight: 600;
+                    font-size: 0.9em;
+                }
+                
+                .message-content {
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
+                
+                .message-content h1, .message-content h2, .message-content h3 {
+                    margin: 10px 0;
+                    color: var(--vscode-editor-foreground);
+                }
+                
+                .message-content h1 { font-size: 1.3em; }
+                .message-content h2 { font-size: 1.2em; }
+                .message-content h3 { font-size: 1.1em; }
+                
+                .message-content p {
+                    margin: 8px 0;
+                }
+                
+                .message-content ul {
+                    margin: 8px 0;
+                    padding-left: 20px;
+                }
+                
+                .message-content li {
+                    margin: 4px 0;
+                }
+                
+                .message-content strong {
+                    font-weight: 600;
+                }
+                
+                .message-content em {
+                    font-style: italic;
+                    color: var(--vscode-descriptionForeground);
+                }
+                
+                .message-content pre {
+                    background-color: var(--vscode-textPreformat-background);
+                    border: 1px solid var(--vscode-panel-border);
+                    border-radius: 4px;
+                    padding: 12px;
+                    overflow-x: auto;
+                    margin: 10px 0;
+                    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+                }
+                
+                .message-content code {
+                    background-color: var(--vscode-textPreformat-background);
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+                    font-size: 0.9em;
+                }
+                
+                .empty-chat {
+                    text-align: center;
+                    color: var(--vscode-descriptionForeground);
+                    padding: 40px;
+                    font-style: italic;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h1 class="chat-title">${escapeHtml(session.customTitle || 'Chat Session')}</h1>
+                    <div class="chat-meta">
+                        Workspace: ${escapeHtml(session.workspaceName)} • 
+                        Messages: ${messages.length} • 
+                        Last modified: ${session.lastModified.toLocaleString()}
+                    </div>
+                </div>
+                
+                <div class="messages">
+                    ${messages.length > 0 ? messagesHtml : '<div class="empty-chat">No messages in this chat session</div>'}
+                </div>
+            </div>
+        </body>
+        </html>
+    `;
+}
+
+// Вспомогательные функции
+function escapeHtml(text: string): string {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function formatCodeContent(text: string): string {
+    // Простое форматирование для кода и markdown
+    let formatted = escapeHtml(text);
+    
+    // Блоки кода с языком
+    formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+        return `<pre><code class="language-${lang}">${code.trim()}</code></pre>`;
+    });
+    
+    // Inline код
+    formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    // Жирный текст
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Курсив
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Заголовки
+    formatted = formatted.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+    formatted = formatted.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+    formatted = formatted.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+    
+    // Списки
+    formatted = formatted.replace(/^[\s]*[-*] (.*$)/gm, '<li>$1</li>');
+    formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+    
+    // Переносы строк
+    formatted = formatted.replace(/\n\n/g, '</p><p>');
+    formatted = '<p>' + formatted + '</p>';
+    
+    return formatted;
+}
+
 export function activate(context: vscode.ExtensionContext) {
     // Создаем провайдер данных
     const chatHistoryProvider = new CopilotChatHistoryProvider();
@@ -338,7 +638,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const openChatCommand = vscode.commands.registerCommand('copilotChatHistory.openChat', (session: ChatSession) => {
-        // Открываем файл сессии чата
+        // Открываем чат в специальном webview вместо JSON файла
+        openChatInWebview(session, context);
+    });
+
+    const openChatJsonCommand = vscode.commands.registerCommand('copilotChatHistory.openChatJson', (session: ChatSession) => {
+        // Открываем JSON файл сессии чата
         if (fs.existsSync(session.filePath)) {
             vscode.workspace.openTextDocument(session.filePath).then(doc => {
                 vscode.window.showTextDocument(doc);
@@ -427,7 +732,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    context.subscriptions.push(refreshCommand, openChatCommand, helloWorldCommand, searchCommand, clearFilterCommand, openWorkspaceInCurrentWindowCommand, openWorkspaceInNewWindowCommand);
+    context.subscriptions.push(refreshCommand, openChatCommand, openChatJsonCommand, helloWorldCommand, searchCommand, clearFilterCommand, openWorkspaceInCurrentWindowCommand, openWorkspaceInNewWindowCommand);
 
     // Автоматически обновляем при активации
     chatHistoryProvider.refresh();

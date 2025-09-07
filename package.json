@@ -2,7 +2,7 @@
   "name": "copilot-chat-history",
   "displayName": "Copilot Chat History",
   "description": "View and manage your GitHub Copilot chat history organized by workspace with search and navigation features",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "publisher": "arbuzov",
   "license": "MIT",
   "author": {
@@ -89,6 +89,11 @@
         "command": "copilotChatHistory.openWorkspaceInNewWindow",
         "title": "Open Workspace in New Window",
         "icon": "$(link-external)"
+      },
+      {
+        "command": "copilotChatHistory.openChatJson",
+        "title": "Open JSON File",
+        "icon": "$(file-code)"
       }
     ],
     "menus": {
@@ -112,7 +117,13 @@
       "view/item/context": [
         {
           "command": "copilotChatHistory.openChat",
-          "when": "view == copilotChatHistoryView && viewItem == chatSession"
+          "when": "view == copilotChatHistoryView && viewItem == chatSession",
+          "group": "chat@1"
+        },
+        {
+          "command": "copilotChatHistory.openChatJson",
+          "when": "view == copilotChatHistoryView && viewItem == chatSession",
+          "group": "chat@2"
         },
         {
           "command": "copilotChatHistory.openWorkspaceInCurrentWindow",
