@@ -1,0 +1,71 @@
+name: Simple Publish
+
+on:
+  push:
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build and package
+      run: |
+        npm run package
+        npx @vscode/vsce package
+    
+    - name: Upload VSIX artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-vsix
+        path: '*.vsix'
+    
+    - name: Publish to VS Code Marketplace
+      if: ${{ secrets.VSCE_TOKEN != '' }}
+      run: |
+        echo "🚀 Publishing to VS Code Marketplace..."
+        npx @vscode/vsce publish --no-dependencies --pat ${{ secrets.VSCE_TOKEN }}
+        echo "✅ Published to VS Code Marketplace"
+    
+    - name: Publish to Open VSX Registry
+      if: ${{ secrets.OVSX_TOKEN != '' }}
+      run: |
+        echo "🚀 Publishing to Open VSX Registry..."
+        npx ovsx publish --no-dependencies --pat ${{ secrets.OVSX_TOKEN }}
+        echo "✅ Published to Open VSX Registry"
+    
+    - name: Create Release (only if tag push)
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        TAG_NAME=${GITHUB_REF#refs/tags/}
+        echo "Creating release for tag: $TAG_NAME"
+        
+        # Check if release already exists
+        if gh release view $TAG_NAME >/dev/null 2>&1; then
+          echo "Release $TAG_NAME already exists, updating..."
+          gh release upload $TAG_NAME *.vsix --clobber
+        else
+          echo "Creating new release $TAG_NAME..."
+          gh release create $TAG_NAME *.vsix \
+            --title "Release $TAG_NAME" \
+            --generate-notes \
+            --latest
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
