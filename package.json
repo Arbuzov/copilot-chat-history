@@ -5,6 +5,10 @@
   "version": "1.0.3",
   "publisher": "arbuzov",
   "license": "MIT",
+  "author": {
+    "name": "Arbuzov",
+    "url": "https://github.com/arbuzov"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/arbuzov/copilot-chat-history.git"
@@ -68,12 +72,13 @@
       },
       {
         "command": "copilotChatHistory.clearFilter",
-        "title": "Clear Filter",
+        "title": "Clear Filter", 
         "icon": "$(clear-all)"
       },
       {
         "command": "copilotChatHistory.openChat",
-        "title": "Open Chat Session"
+        "title": "Open Chat Session",
+        "icon": "$(file-text)"
       },
       {
         "command": "copilotChatHistory.openWorkspaceInCurrentWindow",
@@ -84,10 +89,6 @@
         "command": "copilotChatHistory.openWorkspaceInNewWindow",
         "title": "Open Workspace in New Window",
         "icon": "$(link-external)"
-      },
-      {
-        "command": "copilotChatHistory.helloWorld",
-        "title": "Hello World from Copilot Chat History"
       }
     ],
     "menus": {
@@ -140,9 +141,10 @@
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vscode-test",
-    "publish:vsce": "npx @vscode/vsce publish",
-    "publish:ovsx": "npx ovsx publish",
-    "publish:both": "npm run publish:vsce && npm run publish:ovsx"
+    "publish:vsce": "npm run package && npx @vscode/vsce publish --no-dependencies",
+    "publish:ovsx": "npm run package && npx ovsx publish --no-dependencies",
+    "publish:both": "npm run publish:vsce && npm run publish:ovsx",
+    "verify": "npx @vscode/vsce ls && npx @vscode/vsce package --allow-missing-repository"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
