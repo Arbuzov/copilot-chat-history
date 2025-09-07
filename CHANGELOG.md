@@ -5,6 +5,38 @@ All notable changes to the "copilot-chat-history" extension will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-09-06
+
+### ✨ Enhanced Chat Renderer
+
+- **Authentic VS Code Styling**: Updated webview chat renderer with authentic CSS styles based on the official VS Code Copilot Chat repository
+- **Professional Icons**: Replaced emoji avatars with professional SVG icons matching VS Code's design language
+- **Improved Message Layout**: Restructured message layout to match official VS Code chat interface
+- **Better Typography**: Enhanced font rendering and sizing for improved readability
+- **Advanced Markdown Support**: 
+  - Support for four-backtick code blocks (like official Copilot)
+  - Improved inline code formatting
+  - Better list and quote handling
+  - Link detection and formatting
+  - Proper table rendering
+- **Responsive Design**: Added mobile-friendly responsive breakpoints
+- **Theme Integration**: Full integration with VS Code color themes
+
+### 🎨 Visual Improvements
+
+- **Native Look & Feel**: Chat display now closely matches the official VS Code Copilot Chat interface
+- **Proper Spacing**: Adjusted margins, padding, and line heights to match VS Code standards
+- **Color Consistency**: All colors now use VS Code's CSS variables for perfect theme integration
+- **Avatar Redesign**: Professional user and Copilot icons instead of emoji
+- **Message Bubbles**: Cleaner message container styling with proper borders and backgrounds
+
+### 🐛 Bug Fixes
+
+- Fixed markdown formatting edge cases
+- Improved code block language detection
+- Better handling of special characters in content
+- Fixed responsive design issues on smaller screens
+
 ## [1.0.1] - 2025-09-06
 
 ### Fixed

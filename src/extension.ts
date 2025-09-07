@@ -386,11 +386,17 @@ function generateChatHTML(sessionData: ChatSessionData, session: ChatSession): s
         if (request.message && request.message.text) {
             messagesHtml += `
                 <div class="message user-message">
-                    <div class="message-header">
-                        <div class="avatar user-avatar">👤</div>
-                        <div class="username">${sessionData.requesterUsername || 'User'}</div>
+                    <div class="avatar user-avatar">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <path d="M16 7.992C16 3.58 12.416 0 8 0S0 3.58 0 7.992c0 2.43 1.104 4.62 2.832 6.09.016.016.032.016.032.032.144.112.288.224.448.336.08.048.144.111.224.175A7.98 7.98 0 0 0 8.016 16a7.98 7.98 0 0 0 4.48-1.375c.08-.048.144-.111.224-.16.144-.111.304-.223.448-.335.016-.016.032-.016.032-.032 1.696-1.487 2.8-3.676 2.8-6.106zm-8 7.001c-1.504 0-2.88-.48-4.016-1.279.016-.128.048-.255.08-.383a4.17 4.17 0 0 1 .416-.991c.176-.304.384-.576.64-.816.24-.24.528-.463.816-.639.304-.176.624-.304.976-.4A4.15 4.15 0 0 1 8 10.342a4.185 4.185 0 0 1 2.928 1.166c.368.368.656.8.864 1.295.112.288.192.592.24.911A7.03 7.03 0 0 1 8 15.993zm4.928-2.272A5.03 5.03 0 0 0 8 9.297c-1.311 0-2.513.541-3.584 1.406-.08-.48-.336-.927-.65-1.25a2.97 2.97 0 0 0-.88-.687 3.99 3.99 0 0 1-.04-5.483c.48-.48 1.072-.816 1.712-1.02C4.9 2.034 5.472 1.917 6.08 1.917a3.99 3.99 0 0 1 3.904 3.304c.016.111.048.209.048.329 0 .662-.336 1.243-.864 1.59-.528.346-.864.927-.864 1.589 0 .662.336 1.243.864 1.59.528.346.864.927.864 1.589z"/>
+                        </svg>
                     </div>
-                    <div class="message-content">${escapeHtml(request.message.text)}</div>
+                    <div class="message-body">
+                        <div class="message-header">
+                            <div class="username">${sessionData.requesterUsername || 'User'}</div>
+                        </div>
+                        <div class="message-content">${escapeHtml(request.message.text)}</div>
+                    </div>
                 </div>
             `;
         }
@@ -400,11 +406,17 @@ function generateChatHTML(sessionData: ChatSessionData, session: ChatSession): s
             const responseText = request.response.map(r => r.value).join('\n');
             messagesHtml += `
                 <div class="message copilot-message">
-                    <div class="message-header">
-                        <div class="avatar copilot-avatar">🤖</div>
-                        <div class="username">${sessionData.responderUsername || 'GitHub Copilot'}</div>
+                    <div class="avatar copilot-avatar">
+                        <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                        </svg>
                     </div>
-                    <div class="message-content">${formatCodeContent(responseText)}</div>
+                    <div class="message-body">
+                        <div class="message-header">
+                            <div class="username">${sessionData.responderUsername || 'GitHub Copilot'}</div>
+                        </div>
+                        <div class="message-content">${formatCodeContent(responseText)}</div>
+                    </div>
                 </div>
             `;
         }
@@ -418,109 +430,136 @@ function generateChatHTML(sessionData: ChatSessionData, session: ChatSession): s
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Chat Session</title>
             <style>
+                /* Базовые стили, основанные на официальном VS Code Copilot Chat */
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
                     margin: 0;
-                    padding: 20px;
+                    padding: 16px;
                     background-color: var(--vscode-editor-background);
                     color: var(--vscode-editor-foreground);
-                    line-height: 1.6;
+                    line-height: 1.4;
+                    font-size: 13px;
                 }
                 
                 .chat-container {
-                    max-width: 800px;
+                    max-width: 900px;
                     margin: 0 auto;
                 }
                 
                 .chat-header {
                     border-bottom: 1px solid var(--vscode-panel-border);
-                    padding-bottom: 15px;
-                    margin-bottom: 20px;
+                    padding-bottom: 12px;
+                    margin-bottom: 16px;
                 }
                 
                 .chat-title {
-                    font-size: 1.4em;
+                    font-size: 16px;
                     font-weight: 600;
-                    margin: 0 0 5px 0;
+                    margin: 0 0 4px 0;
+                    color: var(--vscode-editor-foreground);
                 }
                 
                 .chat-meta {
                     color: var(--vscode-descriptionForeground);
-                    font-size: 0.9em;
+                    font-size: 11px;
                 }
                 
+                /* Стили сообщений, основанные на .interactive-item-container */
                 .message {
-                    margin-bottom: 20px;
-                    padding: 15px;
-                    border-radius: 8px;
-                    border: 1px solid var(--vscode-panel-border);
+                    display: flex;
+                    margin-bottom: 16px;
+                    padding: 8px 16px;
+                    gap: 8px;
+                    border-radius: 3px;
+                    position: relative;
                 }
                 
                 .user-message {
-                    background-color: var(--vscode-input-background);
-                    border-left: 4px solid var(--vscode-charts-blue);
+                    background-color: transparent;
                 }
                 
                 .copilot-message {
-                    background-color: var(--vscode-textBlockQuote-background);
-                    border-left: 4px solid var(--vscode-charts-green);
+                    background-color: var(--vscode-chat-requestBackground, transparent);
+                }
+                
+                /* Стили для аватаров, основанные на .header .avatar */
+                .avatar {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-shrink: 0;
+                    margin-top: 1px;
+                    font-size: 12px;
+                    outline: 1px solid var(--vscode-contrastBorder, transparent);
+                    outline-offset: -1px;
+                }
+                
+                .user-avatar {
+                    background-color: var(--vscode-testing-iconPassed);
+                    color: var(--vscode-button-foreground);
+                }
+                
+                .copilot-avatar {
+                    background-color: var(--vscode-button-secondaryBackground);
+                    color: var(--vscode-button-secondaryForeground);
+                }
+                
+                /* Контент сообщения */
+                .message-body {
+                    flex: 1;
+                    min-width: 0;
                 }
                 
                 .message-header {
                     display: flex;
                     align-items: center;
-                    margin-bottom: 10px;
-                }
-                
-                .avatar {
-                    width: 24px;
-                    height: 24px;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-right: 8px;
-                    font-size: 14px;
-                }
-                
-                .user-avatar {
-                    background-color: var(--vscode-charts-blue);
-                }
-                
-                .copilot-avatar {
-                    background-color: var(--vscode-charts-green);
+                    margin-bottom: 4px;
+                    gap: 6px;
                 }
                 
                 .username {
                     font-weight: 600;
-                    font-size: 0.9em;
-                }
-                
-                .message-content {
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                }
-                
-                .message-content h1, .message-content h2, .message-content h3 {
-                    margin: 10px 0;
+                    font-size: 11px;
                     color: var(--vscode-editor-foreground);
                 }
                 
-                .message-content h1 { font-size: 1.3em; }
-                .message-content h2 { font-size: 1.2em; }
-                .message-content h3 { font-size: 1.1em; }
+                /* Стили контента, основанные на .chatMessageContent */
+                .message-content {
+                    color: var(--vscode-editor-foreground);
+                    font-size: 13px;
+                    line-height: 1.4;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+                    -webkit-user-select: text;
+                    user-select: text;
+                }
+                
+                /* Markdown стили */
+                .message-content h1, .message-content h2, .message-content h3 {
+                    margin: 16px 0 8px 0;
+                    color: var(--vscode-editor-foreground);
+                    font-weight: 600;
+                }
+                
+                .message-content h1 { font-size: 18px; }
+                .message-content h2 { font-size: 16px; }
+                .message-content h3 { font-size: 14px; }
                 
                 .message-content p {
                     margin: 8px 0;
                 }
                 
-                .message-content ul {
+                .message-content ul, .message-content ol {
                     margin: 8px 0;
                     padding-left: 20px;
                 }
                 
                 .message-content li {
-                    margin: 4px 0;
+                    margin: 2px 0;
                 }
                 
                 .message-content strong {
@@ -529,32 +568,103 @@ function generateChatHTML(sessionData: ChatSessionData, session: ChatSession): s
                 
                 .message-content em {
                     font-style: italic;
-                    color: var(--vscode-descriptionForeground);
                 }
                 
+                /* Код блоки, стили основанные на VS Code */
                 .message-content pre {
-                    background-color: var(--vscode-textPreformat-background);
+                    background-color: var(--vscode-textCodeBlock-background);
                     border: 1px solid var(--vscode-panel-border);
-                    border-radius: 4px;
-                    padding: 12px;
+                    border-radius: 3px;
+                    padding: 8px 12px;
+                    margin: 8px 0;
                     overflow-x: auto;
-                    margin: 10px 0;
-                    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+                    font-family: var(--vscode-editor-font-family, 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace);
+                    font-size: 12px;
+                    line-height: 1.357;
                 }
                 
                 .message-content code {
                     background-color: var(--vscode-textPreformat-background);
-                    padding: 2px 4px;
+                    color: var(--vscode-textPreformat-foreground);
+                    padding: 1px 3px;
                     border-radius: 3px;
-                    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-                    font-size: 0.9em;
+                    font-family: var(--vscode-editor-font-family, 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace);
+                    font-size: 12px;
                 }
                 
+                .message-content pre code {
+                    background: transparent;
+                    padding: 0;
+                    color: var(--vscode-editor-foreground);
+                }
+                
+                /* Блок цитат */
+                .message-content blockquote {
+                    margin: 8px 0;
+                    padding: 0 12px;
+                    border-left: 4px solid var(--vscode-textBlockQuote-border);
+                    background-color: var(--vscode-textBlockQuote-background);
+                    color: var(--vscode-textBlockQuote-foreground);
+                }
+                
+                /* Таблицы */
+                .message-content table {
+                    border-collapse: collapse;
+                    margin: 8px 0;
+                    width: 100%;
+                }
+                
+                .message-content th, .message-content td {
+                    border: 1px solid var(--vscode-panel-border);
+                    padding: 6px 8px;
+                    text-align: left;
+                }
+                
+                .message-content th {
+                    background-color: var(--vscode-keybindingTable-headerBackground);
+                    font-weight: 600;
+                }
+                
+                /* Ссылки */
+                .message-content a {
+                    color: var(--vscode-textLink-foreground);
+                    text-decoration: none;
+                }
+                
+                .message-content a:hover {
+                    color: var(--vscode-textLink-activeForeground);
+                    text-decoration: underline;
+                }
+                
+                /* Пустой чат */
                 .empty-chat {
                     text-align: center;
                     color: var(--vscode-descriptionForeground);
-                    padding: 40px;
+                    padding: 40px 20px;
                     font-style: italic;
+                    font-size: 13px;
+                }
+                
+                /* Responsive design */
+                @media (max-width: 600px) {
+                    body {
+                        padding: 8px;
+                    }
+                    
+                    .message {
+                        padding: 6px 12px;
+                        gap: 6px;
+                    }
+                    
+                    .avatar {
+                        width: 18px;
+                        height: 18px;
+                        font-size: 10px;
+                    }
+                    
+                    .message-content {
+                        font-size: 12px;
+                    }
                 }
             </style>
         </head>
@@ -589,35 +699,76 @@ function escapeHtml(text: string): string {
 }
 
 function formatCodeContent(text: string): string {
-    // Простое форматирование для кода и markdown
+    // Улучшенное форматирование markdown для аутентичного отображения
     let formatted = escapeHtml(text);
     
-    // Блоки кода с языком
-    formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+    // Блоки кода с четырьмя обратными кавычками (как в VS Code Copilot)
+    formatted = formatted.replace(/````(\w*)\n?([\s\S]*?)````/g, (match, lang, code) => {
+        return `<pre><code class="language-${lang}">${code.trim()}</code></pre>`;
+    });
+    
+    // Обычные блоки кода с тремя обратными кавычками
+    formatted = formatted.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code) => {
         return `<pre><code class="language-${lang}">${code.trim()}</code></pre>`;
     });
     
     // Inline код
-    formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+    formatted = formatted.replace(/`([^`\n]+)`/g, '<code>$1</code>');
     
     // Жирный текст
     formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     
     // Курсив
-    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/(?<!\*)\*([^\*\n]+)\*(?!\*)/g, '<em>$1</em>');
     
     // Заголовки
     formatted = formatted.replace(/^### (.*$)/gm, '<h3>$1</h3>');
     formatted = formatted.replace(/^## (.*$)/gm, '<h2>$1</h2>');
     formatted = formatted.replace(/^# (.*$)/gm, '<h1>$1</h1>');
     
-    // Списки
-    formatted = formatted.replace(/^[\s]*[-*] (.*$)/gm, '<li>$1</li>');
-    formatted = formatted.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+    // Цитаты
+    formatted = formatted.replace(/^> (.*$)/gm, '<blockquote>$1</blockquote>');
     
-    // Переносы строк
-    formatted = formatted.replace(/\n\n/g, '</p><p>');
-    formatted = '<p>' + formatted + '</p>';
+    // Нумерованные списки
+    formatted = formatted.replace(/^\d+\.\s+(.*$)/gm, '<li>$1</li>');
+    formatted = formatted.replace(/(<li>.*<\/li>)/gs, (match) => {
+        if (!match.includes('<ol>')) {
+            return '<ol>' + match + '</ol>';
+        }
+        return match;
+    });
+    
+    // Маркированные списки  
+    formatted = formatted.replace(/^[\s]*[-*+]\s+(.*$)/gm, '<li>$1</li>');
+    formatted = formatted.replace(/(<li>.*<\/li>)/gs, (match) => {
+        if (!match.includes('<ul>') && !match.includes('<ol>')) {
+            return '<ul>' + match + '</ul>';
+        }
+        return match;
+    });
+    
+    // Ссылки
+    formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+    
+    // Простые URL
+    formatted = formatted.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>');
+    
+    // Разделители
+    formatted = formatted.replace(/^---$/gm, '<hr>');
+    
+    // Переносы строк - два пробела в конце строки
+    formatted = formatted.replace(/  \n/g, '<br>\n');
+    
+    // Абзацы
+    formatted = formatted.replace(/\n\s*\n/g, '</p><p>');
+    
+    // Обернуть в абзац, если еще не обернуто
+    if (!formatted.startsWith('<') && formatted.trim() !== '') {
+        formatted = '<p>' + formatted + '</p>';
+    }
+    
+    // Очистка пустых абзацев
+    formatted = formatted.replace(/<p>\s*<\/p>/g, '');
     
     return formatted;
 }

@@ -2,6 +2,26 @@
 
 A Visual Studio Code extension that helps you view and manage your GitHub Copilot chat history organized by workspace.
 
+## 🎨 Enhanced Chat Display (v1.1.0)
+
+The extension now features a completely redesigned chat renderer that closely matches the official VS Code Copilot Chat interface:
+
+### ✨ New Features
+- **Authentic VS Code Styling**: CSS styles based on the official VS Code Copilot Chat repository
+- **Professional Icons**: SVG icons for user and Copilot avatars instead of emoji
+- **Advanced Markdown Support**: 
+  - Four-backtick code blocks (like official Copilot)
+  - Better formatting for lists, quotes, links, and tables
+  - Proper syntax highlighting integration
+- **Responsive Design**: Optimized for different screen sizes
+- **Theme Integration**: Full VS Code theme support with proper color variables
+
+### 🎯 Improved User Experience
+- Native look and feel matching VS Code's design language
+- Better typography and spacing
+- Enhanced readability with proper contrast ratios
+- Professional message layout with improved avatars
+
 ## Features
 
 - 📁 **Workspace Organization**: Chat sessions grouped by workspace for easy navigation
