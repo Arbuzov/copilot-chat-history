@@ -193,6 +193,12 @@ class CopilotChatHistoryProvider implements vscode.TreeDataProvider<ChatSession 
                         try {
                             const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
                             const messageCount = sessionData.requests ? sessionData.requests.length : 0;
+                            
+                            // Пропускаем сессии без requests или с пустым массивом requests
+                            if (!sessionData.requests || sessionData.requests.length === 0) {
+                                continue;
+                            }
+                            
                             let customTitle = sessionData.customTitle;
                             
                             // Если нет customTitle, берем первое сообщение из requests
