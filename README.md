@@ -91,13 +91,28 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Press `F5` to open a new Extension Development Host window
 4. Test your changes
 
-### Building
+### Building and Packaging
 
 ```bash
+# Development commands
 npm run compile          # Compile TypeScript
 npm run watch           # Watch for changes
 npm run package         # Build for production
+
+# Create installable package
+npm run package:vsix     # Creates .vsix file for installation
+
+# Publishing (requires tokens)
+npm run publish:vsce     # Publish to VS Code Marketplace
+npm run publish:ovsx     # Publish to Open VSX Registry
+npm run publish:both     # Publish to both marketplaces
 ```
+
+### Local Testing
+
+1. Build VSIX package: `npm run package:vsix`
+2. Install locally: `code --install-extension copilot-chat-history-1.0.3.vsix`
+3. Reload VS Code and test functionality
 
 ## License
 
