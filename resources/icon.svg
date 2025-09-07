@@ -1,24 +1,73 @@
 <svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-  <rect width="128" height="128" fill="#1e1e1e"/>
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e1e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d2d30;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="chatGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0078d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#106ebe;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="chatGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#40e0d0;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#20b2aa;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="copilotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f7931e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
   
-  <!-- Chat bubble -->
-  <rect x="20" y="30" width="50" height="35" rx="8" fill="#0078d4" opacity="0.9"/>
-  <circle cx="32" cy="42" r="3" fill="white"/>
-  <circle cx="42" cy="42" r="3" fill="white"/>
-  <circle cx="52" cy="42" r="3" fill="white"/>
+  <!-- Background -->
+  <rect width="128" height="128" fill="url(#bgGradient)" rx="16"/>
   
-  <!-- Second chat bubble -->
-  <rect x="58" y="50" width="50" height="35" rx="8" fill="#40e0d0" opacity="0.8"/>
-  <circle cx="70" cy="62" r="3" fill="white"/>
-  <circle cx="80" cy="62" r="3" fill="white"/>
-  <circle cx="90" cy="62" r="3" fill="white"/>
+  <!-- Main chat bubble with shadow -->
+  <ellipse cx="45" cy="49" rx="27" ry="20" fill="#000" opacity="0.2"/>
+  <rect x="18" y="28" width="54" height="38" rx="12" fill="url(#chatGradient1)" stroke="#ffffff" stroke-width="1"/>
   
-  <!-- History lines -->
-  <rect x="20" y="95" width="40" height="3" rx="1.5" fill="#888"/>
-  <rect x="20" y="102" width="60" height="3" rx="1.5" fill="#888"/>
-  <rect x="20" y="109" width="30" height="3" rx="1.5" fill="#888"/>
+  <!-- Chat bubble content -->
+  <circle cx="30" cy="42" r="4" fill="white" opacity="0.9"/>
+  <circle cx="42" cy="42" r="4" fill="white" opacity="0.9"/>
+  <circle cx="54" cy="42" r="4" fill="white" opacity="0.9"/>
+  <rect x="25" y="50" width="20" height="2" rx="1" fill="white" opacity="0.7"/>
+  <rect x="25" y="54" width="30" height="2" rx="1" fill="white" opacity="0.7"/>
   
-  <!-- Copilot icon hint -->
-  <circle cx="100" cy="25" r="12" fill="#ff6b35"/>
-  <rect x="96" y="21" width="8" height="8" rx="2" fill="white"/>
+  <!-- Second chat bubble with shadow -->
+  <ellipse cx="83" cy="69" rx="27" ry="20" fill="#000" opacity="0.2"/>
+  <rect x="56" y="48" width="54" height="38" rx="12" fill="url(#chatGradient2)" stroke="#ffffff" stroke-width="1"/>
+  
+  <!-- Second chat bubble content -->
+  <circle cx="68" cy="62" r="4" fill="white" opacity="0.9"/>
+  <circle cx="80" cy="62" r="4" fill="white" opacity="0.9"/>
+  <circle cx="92" cy="62" r="4" fill="white" opacity="0.9"/>
+  <rect x="63" y="70" width="25" height="2" rx="1" fill="white" opacity="0.7"/>
+  <rect x="63" y="74" width="35" height="2" rx="1" fill="white" opacity="0.7"/>
+  
+  <!-- History timeline -->
+  <rect x="20" y="95" width="45" height="4" rx="2" fill="#666"/>
+  <rect x="20" y="102" width="65" height="4" rx="2" fill="#666"/>
+  <rect x="20" y="109" width="35" height="4" rx="2" fill="#666"/>
+  <rect x="20" y="116" width="55" height="4" rx="2" fill="#666"/>
+  
+  <!-- History dots -->
+  <circle cx="15" cy="97" r="3" fill="#888"/>
+  <circle cx="15" cy="104" r="3" fill="#888"/>
+  <circle cx="15" cy="111" r="3" fill="#888"/>
+  <circle cx="15" cy="118" r="3" fill="#888"/>
+  
+  <!-- Copilot logo with shadow -->
+  <circle cx="102" cy="27" r="16" fill="#000" opacity="0.3"/>
+  <circle cx="100" cy="25" r="15" fill="url(#copilotGradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Copilot inner design -->
+  <rect x="94" y="19" width="12" height="12" rx="3" fill="white"/>
+  <rect x="96" y="21" width="3" height="3" rx="1" fill="#ff6b35"/>
+  <rect x="101" y="21" width="3" height="3" rx="1" fill="#ff6b35"/>
+  <rect x="96" y="26" width="8" height="2" rx="1" fill="#ff6b35"/>
+  
+  <!-- Sparkles/stars around -->
+  <polygon points="112,15 113,17 115,17 113.5,18.5 114,21 112,19.5 110,21 110.5,18.5 109,17 111,17" fill="#ffd700"/>
+  <polygon points="85,10 86,11 87,11 86.5,12 87,13 85,12 83,13 83.5,12 83,11 84,11" fill="#ffd700"/>
+  <polygon points="15,35 16,36 17,36 16.5,37 17,38 15,37 13,38 13.5,37 13,36 14,36" fill="#ffd700"/>
 </svg>
