@@ -1,0 +1,130 @@
+{
+  "index_version": "1.0",
+  "lock_version": "1.0",
+  "resolved_from": "lock.json",
+  "resolved_at": "2026-08-28T14:14:55Z",
+  
+  "description": "INDEX BUILD: Resolves lock.json into concrete packages, versions, hashes. This is the resolution layer - everything declared in lock.json is resolved here into what actually goes INTO the .exe.",
+  
+  "runtime_dependencies": {
+    "python-docx": {
+      "version": "0.8.11",
+      "source": "pypi",
+      "purpose": "Generate .docx (Word) files preserving formatting",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 450
+    },
+    "openpyxl": {
+      "version": "3.8.0",
+      "source": "pypi",
+      "purpose": "Generate .xlsx (Excel) files with structured data",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 380
+    },
+    "requests": {
+      "version": "2.28.0",
+      "source": "pypi",
+      "purpose": "HTTP requests for OAuth token exchange",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 120
+    }
+  },
+  
+  "internal_modules": {
+    "copilot_login_detector.py": {
+      "version": "1.0",
+      "source": "local",
+      "process": "Process 1",
+      "purpose": "Detect Copilot login events",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 4
+    },
+    "copilot_auth_handler.py": {
+      "version": "1.0",
+      "source": "local",
+      "process": "Process 2",
+      "purpose": "OAuth2 authorization (GitHub)",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 9
+    },
+    "copilot_history_downloader.py": {
+      "version": "1.0",
+      "source": "local",
+      "process": "Process 3",
+      "purpose": "Download history from Copilot Privacy tab",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 8
+    },
+    "copilot_content_exporter.py": {
+      "version": "1.0",
+      "source": "local",
+      "process": "Process 4",
+      "purpose": "Export to .docx and .xlsx (preserve formatting)",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 14
+    },
+    "copilot_word_frequency_analyzer.py": {
+      "version": "1.0",
+      "source": "local",
+      "process": "Process 5",
+      "purpose": "Analyze word frequency, create Excel report",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 14
+    },
+    "word_search_engine.py": {
+      "version": "1.0",
+      "source": "local",
+      "purpose": "Full-text search with SQLite indexing",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 15
+    },
+    "onedrive_sync_manager.py": {
+      "version": "1.0",
+      "source": "local",
+      "purpose": "Optional OneDrive backup/restore",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 9
+    },
+    "main.py": {
+      "version": "1.0",
+      "source": "local",
+      "purpose": "CLI entry point and application orchestration",
+      "included_in_exe": true,
+      "compressed": true,
+      "size_kb": 10
+    }
+  },
+  
+  "standard_library_modules": {
+    "sqlite3": "Bundled with Python (search indexing)",
+    "json": "Bundled with Python (config, logging)",
+    "pathlib": "Bundled with Python (file operations)",
+    "datetime": "Bundled with Python (timestamps)",
+    "os": "Bundled with Python (environment variables)"
+  },
+  
+  "exe_composition": {
+    "python_runtime": "Embedded by PyInstaller",
+    "dependencies_kb": 950,
+    "internal_modules_kb": 83,
+    "total_payload_kb": 1033,
+    "compressed_exe_size_mb": "~35-45 MB (typical PyInstaller)",
+    "uncompressed_temp_size_mb": "~150 MB at runtime"
+  },
+  
+  "entry_point_reference": {
+    "entry_points.json": "See entry_points.json for how these resolved packages are EXECUTED"
+  },
+  
+  "resolution_notes": "All packages are pinned to specific versions. No 'latest' versions. No external index server at runtime. Everything needed is inside the .exe."
+}

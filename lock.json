@@ -1,0 +1,89 @@
+{
+  "lock_version": "1.0",
+  "framework": "ContentExportFramework",
+  "model": "legacy-self-contained",
+  "timestamp": "2026-08-28T14:14:55Z",
+  "created_by": "LegacyExeBuilder v1.0",
+  
+  "description": "LOCK SECTION: Declares complete universe BEFORE build begins. Everything that is allowed to exist in the .exe is declared here first.",
+  
+  "environments": [
+    "win32",
+    "win64"
+  ],
+  
+  "requires_python": ">=3.8,<4.0",
+  
+  "architecture": {
+    "type": "self-contained",
+    "model": "legacy-single-entry-point",
+    "plugins": false,
+    "distributed_components": false,
+    "plugin_registry": false,
+    "sector_registry": false,
+    "extension_system": false
+  },
+  
+  "packages": {
+    "runtime_dependencies": [
+      "python-docx>=0.8.11",
+      "openpyxl>=3.8.0",
+      "requests>=2.28.0"
+    ],
+    "internal_modules": [
+      "copilot_login_detector.py",
+      "copilot_auth_handler.py",
+      "copilot_history_downloader.py",
+      "copilot_content_exporter.py",
+      "copilot_word_frequency_analyzer.py",
+      "word_search_engine.py",
+      "onedrive_sync_manager.py",
+      "main.py"
+    ],
+    "standard_library": [
+      "sqlite3",
+      "json",
+      "pathlib",
+      "datetime"
+    ]
+  },
+  
+  "entry_points": {
+    "console_scripts": {
+      "ContentExportFramework": "main:ContentExportFramework.run"
+    }
+  },
+  
+  "storage_model": {
+    "type": "local-only",
+    "primary_location": "$APPDATA/ContentExportFramework/data",
+    "optional_backup": "OneDrive (user choice)",
+    "backup_account": "aprilapeterson@gmail.com",
+    "portable": false
+  },
+  
+  "excluded_features": {
+    "plugins": "No plugin system in v1.0",
+    "sector_registry": "No extensibility in v1.0",
+    "distributed_components": "All in one .exe",
+    "api_server": "No server component",
+    "web_dashboard": "Future version",
+    "gui_module": "CLI only in v1.0",
+    "multi_user": "Single user per installation",
+    "data_encryption": "Future version"
+  },
+  
+  "phases_completed": [
+    "Phase 1: 5-Process Pipeline (Copilot)"
+  ],
+  
+  "phases_deferred": [
+    "Phase 3: Multi-Platform (Gemini, ChatGPT, Claude)",
+    "Phase 4: Advanced Analytics (ML, semantic search)",
+    "Phase 5: Enterprise (multi-user, RBAC, audit)",
+    "Phase 6: GUI & Web Dashboard",
+    "Phase 7: Mobile & Cross-Platform"
+  ],
+  
+  "declaration": "This lock section declares the complete, immutable universe of what is allowed in ContentExportFramework v1.0. Nothing else enters the .exe. Nothing is distributed. Nothing is pluggable. It is one file, complete in itself."
+}

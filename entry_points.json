@@ -1,0 +1,127 @@
+{
+  "entry_points_version": "1.0",
+  "lock_version": "1.0",
+  "index_version": "1.0",
+  
+  "description": "ENTRY POINTS: The execution layer. This defines HOW the resolved packages (index.json) from the declared universe (lock.json) are EXECUTED when the user runs ContentExportFramework.exe",
+  
+  "entry_point_model": "single-console-script",
+  
+  "console_scripts": {
+    "ContentExportFramework": {
+      "module": "main",
+      "class": "ContentExportFramework",
+      "method": "run",
+      "description": "Main application entry point - starts CLI menu"
+    }
+  },
+  
+  "entry_point_flow": {
+    "step_1": "User double-clicks ContentExportFramework.exe on Desktop (or Start Menu)",
+    "step_2": "Windows launcher stub (PyInstaller) activates",
+    "step_3": "Python runtime is extracted from .exe to temp directory",
+    "step_4": "All locked packages extracted to temp (python-docx, openpyxl, requests, etc.)",
+    "step_5": "All internal modules extracted to temp (copilot_*.py, word_search_engine.py, etc.)",
+    "step_6": "Python interpreter executes: python -m main",
+    "step_7": "main.ContentExportFramework.run() is called",
+    "step_8": "CLI menu is displayed to user",
+    "step_9": "User selects option (1-7)",
+    "step_10": "Selected process executes using extracted modules and dependencies",
+    "step_11": "Data is written to $APPDATA/ContentExportFramework/data/",
+    "step_12": "User can optionally sync to OneDrive",
+    "step_13": "Program exits or loops to menu",
+    "step_14": "Temp files cleaned up by Windows temp cleaner (later)"
+  },
+  
+  "execution_modes": {
+    "interactive": {
+      "default": true,
+      "invocation": "ContentExportFramework.exe (no arguments)",
+      "behavior": "Display menu, wait for user input",
+      "description": "The ONLY execution mode in v1.0"
+    },
+    "command_line_args": {
+      "supported": false,
+      "reason": "Out of scope for v1.0 (future enhancement)",
+      "example": "ContentExportFramework.exe --sector copilot --user john (NOT YET)"
+    },
+    "service_mode": {
+      "supported": false,
+      "reason": "Out of scope for v1.0",
+      "example": "Background daemon (NOT YET)"
+    }
+  },
+  
+  "cli_menu_structure": {
+    "1": {
+      "name": "Start Copilot Export Pipeline",
+      "processes": ["Process 1: Login Detection", "Process 2: Authorization", "Process 3: Download", "Process 4: Export", "Process 5: Analyze"],
+      "user_input": "User ID (optional, defaults to 'default_user')",
+      "interactive_steps": "Prompts for browser auth in step 2"
+    },
+    "2": {
+      "name": "Search Exported Content",
+      "purpose": "Query word search index",
+      "user_input": "Search keywords, phrases, wildcards"
+    },
+    "3": {
+      "name": "Sync to OneDrive",
+      "account": "aprilapeterson@gmail.com",
+      "user_input": "Confirm sync or select folder"
+    },
+    "4": {
+      "name": "Restore from OneDrive",
+      "account": "aprilapeterson@gmail.com",
+      "warning": "Overwrites local with newer OneDrive versions"
+    },
+    "5": {
+      "name": "Open Data Folder",
+      "location": "$APPDATA/ContentExportFramework/data",
+      "behavior": "Launches Windows Explorer"
+    },
+    "6": {
+      "name": "Settings",
+      "shows": "Current configuration, paths, account info"
+    },
+    "7": {
+      "name": "Exit",
+      "behavior": "Closes application"
+    }
+  },
+  
+  "file_I_O_paths": {
+    "exe_location": "$PROGRAMFILES/ContentExportFramework/ContentExportFramework.exe",
+    "data_root": "$APPDATA/ContentExportFramework/data",
+    "subdirectories": {
+      "raw_exports": "$APPDATA/ContentExportFramework/data/raw-exports",
+      "formatted_exports": "$APPDATA/ContentExportFramework/data/formatted-exports",
+      "analysis": "$APPDATA/ContentExportFramework/data/analysis",
+      "logs": "$APPDATA/ContentExportFramework/data/logs"
+    },
+    "configuration": "$APPDATA/ContentExportFramework/config"
+  },
+  
+  "threading_and_execution": {
+    "model": "single-threaded",
+    "reason": "Synchronous CLI (v1.0)",
+    "async": false,
+    "background_tasks": false,
+    "future": "Multi-threading in v2.0+"
+  },
+  
+  "error_handling": {
+    "file_not_found": "Display error message, prompt user retry",
+    "oauth_timeout": "Display timeout message, instruct manual browser auth",
+    "api_unreachable": "Display warning, suggest checking network",
+    "disk_full": "Display error, suggest freeing space"
+  },
+  
+  "interlock_with_lock_and_index": {
+    "lock_section": "Declares what is ALLOWED (universe)",
+    "index_build": "Resolves what is INSIDE (dependencies)",
+    "entry_points": "Defines what EXECUTES and HOW (execution)",
+    "relationship": "All three are orthogonal but interlock. Lock defines boundary. Index resolves it. Entry Points execute it."
+  },
+  
+  "execution_guarantee": "When user clicks ContentExportFramework.exe, everything needed is inside. No external registry. No external index server. No plugins. No distributed components. Just one file, complete in itself."
+}
